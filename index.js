@@ -50,4 +50,4 @@ class NodeGuardian {
   }
 }
 
-module.exports = NodeGuardian;
+export default NodeGuardian;
