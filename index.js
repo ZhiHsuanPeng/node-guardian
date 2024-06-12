@@ -3,8 +3,8 @@ import parse from 'stack-trace';
 import fs from 'fs/promises';
 
 class NodeGuardian {
-  constructor(accessToken) {
-    this.accessToken = accessToken;
+  constructor(option = {}) {
+    this.accessToken = option.accessToken || null;
   }
 
   async log(data) {
