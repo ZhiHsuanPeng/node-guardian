@@ -21,33 +21,38 @@ class NodeGuardian {
 
   handleError() {
     return async function (err, req, res, next) {
-      const trace = parse(err);
-      const regex = /^file:\/\/\/([A-Za-z]:\/.*)$/;
-      const errorLine = trace[0].getLineNumber();
-      const errorFilePath = trace[0].getFileName().match(regex)[1];
+      try {
+        const trace = parse(err);
+        const regex = /^file:\/\/\/([A-Za-z]:\/.*)$/;
+        const errorLine = trace[0].getLineNumber();
+        const errorFilePath = trace[0].getFileName().match(regex)[1];
 
-      const data = await fs.readFile(errorFilePath, 'utf8');
+        const data = await fs.readFile(errorFilePath, 'utf8');
 
-      const errorCode = [];
-      const lines = data.split('\n');
+        const errorCode = [];
+        const lines = data.split('\n');
 
-      for (let i = errorLine - 2 || 0; i < errorLine + 2 && i < lines.length; i++) {
-        errorCode.push(lines[i]);
+        for (let i = errorLine - 2 || 0; i < errorLine + 2 && i < lines.length; i++) {
+          errorCode.push(lines[i]);
+        }
+
+        await axios({
+          method: 'post',
+          url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
+          data: {
+            accessToken: this.accessToken,
+            level: 'error',
+            err,
+            req,
+            code: errorCode.join('\n'),
+          },
+        });
+
+        next();
+      } catch (err) {
+        console.log(err);
+        next();
       }
-
-      await axios({
-        method: 'post',
-        url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
-        data: {
-          accessToken: this.accessToken,
-          level: 'error',
-          err,
-          req,
-          code: errorCode.join('\n'),
-        },
-      });
-
-      next();
     };
   }
 }
