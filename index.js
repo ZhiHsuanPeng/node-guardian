@@ -12,6 +12,7 @@ class NodeGuardian {
       method: 'post',
       url: 'https://nodeguardianapp.com/api/v1/logs',
       data: {
+        accessToken: this.accessToken,
         level: info,
         data,
       },
@@ -38,6 +39,7 @@ class NodeGuardian {
         method: 'post',
         url: 'https://nodeguardianapp.com/api/v1/logs',
         data: {
+          accessToken: this.accessToken,
           level: 'error',
           err,
           req,
