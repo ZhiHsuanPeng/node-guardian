@@ -58,10 +58,10 @@ class NodeGuardian {
           },
         });
 
-        next();
+        next(req, err);
       } catch (err) {
         console.log(err);
-        next();
+        next(req, err);
       }
     };
   }
