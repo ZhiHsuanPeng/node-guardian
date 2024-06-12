@@ -43,7 +43,15 @@ class NodeGuardian {
           errorCode.push(lines[i]);
         }
 
-        const flattenedReq = stringify(req);
+        const filteredReqObj = {
+          headers: req.rawHeaders,
+          method: req.method,
+          protocol: req.protocol,
+          requestIp: req.socket.remoteAddress,
+          requestProxyIp: req.headers['x-forwarded-for'],
+          host: req.hostname,
+          originalUrl: req.originalUrl,
+        };
 
         await axios({
           method: 'post',
@@ -53,7 +61,7 @@ class NodeGuardian {
             accessToken,
             level: 'error',
             err: err.stack,
-            flattenedReq,
+            filteredReqObj,
             code: errorCode.join('\n'),
           },
         });
