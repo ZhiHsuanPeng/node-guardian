@@ -11,7 +11,6 @@ class NodeGuardian {
   }
 
   async log(data) {
-    const accessToken = this.accessToken;
     const flattenData = stringify(data);
     await axios({
       method: 'post',
@@ -27,6 +26,7 @@ class NodeGuardian {
 
   handleError() {
     const accessToken = this.accessToken;
+    const httpsAgent = this.httpsAgent;
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
@@ -48,11 +48,11 @@ class NodeGuardian {
         await axios({
           method: 'post',
           url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
-          httpsAgent: this.httpsAgent,
+          httpsAgent,
           data: {
             accessToken,
             level: 'error',
-            err,
+            err: err.stack,
             flattenedReq,
             code: errorCode.join('\n'),
           },
