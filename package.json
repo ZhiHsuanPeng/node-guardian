@@ -1,6 +1,6 @@
 {
   "name": "node-guardian",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "type": "module",
   "description": "Start of a new project",
   "main": "index.js",
