@@ -2,10 +2,12 @@ import axios from 'axios';
 import { parse } from 'stack-trace';
 import fs from 'fs/promises';
 import { stringify } from 'flatted';
+import https from 'https';
 
 class NodeGuardian {
   constructor(option = {}) {
     this.accessToken = option.accessToken || null;
+    this.httpsAgent = new https.Agent({ rejectUnauthorized: false });
   }
 
   async log(data) {
@@ -14,6 +16,7 @@ class NodeGuardian {
     await axios({
       method: 'post',
       url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
+      httpsAgent: this.httpsAgent,
       data: {
         accessToken: this.accessToken,
         level: info,
@@ -40,16 +43,16 @@ class NodeGuardian {
           errorCode.push(lines[i]);
         }
 
-        const flattenedErr = stringify(err);
         const flattenedReq = stringify(req);
 
         await axios({
           method: 'post',
           url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
+          httpsAgent: this.httpsAgent,
           data: {
             accessToken,
             level: 'error',
-            flattenedErr,
+            err,
             flattenedReq,
             code: errorCode.join('\n'),
           },
