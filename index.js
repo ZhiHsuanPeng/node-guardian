@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { parse } from 'stack-trace';
 import fs from 'fs/promises';
+import { stringify } from 'flatted';
 
 class NodeGuardian {
   constructor(option = {}) {
@@ -8,18 +9,21 @@ class NodeGuardian {
   }
 
   async log(data) {
+    const accessToken = this.accessToken;
+    const flattenData = stringify(data);
     await axios({
       method: 'post',
       url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
       data: {
         accessToken: this.accessToken,
         level: info,
-        data,
+        flattenData,
       },
     });
   }
 
   handleError() {
+    const accessToken = this.accessToken;
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
@@ -36,14 +40,17 @@ class NodeGuardian {
           errorCode.push(lines[i]);
         }
 
+        const flattenedErr = stringify(err);
+        const flattenedReq = stringify(req);
+
         await axios({
           method: 'post',
           url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
           data: {
-            accessToken: this.accessToken,
+            accessToken,
             level: 'error',
-            err,
-            req,
+            flattenedErr,
+            flattenedReq,
             code: errorCode.join('\n'),
           },
         });
