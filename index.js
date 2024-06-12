@@ -10,7 +10,7 @@ class NodeGuardian {
   async log(data) {
     await axios({
       method: 'post',
-      url: 'https://nodeguardianapp.com/api/v1/logs',
+      url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
       data: {
         accessToken: this.accessToken,
         level: info,
@@ -37,7 +37,7 @@ class NodeGuardian {
 
       await axios({
         method: 'post',
-        url: 'https://nodeguardianapp.com/api/v1/logs',
+        url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
         data: {
           accessToken: this.accessToken,
           level: 'error',
