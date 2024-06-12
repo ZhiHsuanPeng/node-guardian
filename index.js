@@ -1,5 +1,5 @@
 import axios from 'axios';
-import parse from 'stack-trace';
+import { parse } from 'stack-trace';
 import fs from 'fs/promises';
 
 class NodeGuardian {
