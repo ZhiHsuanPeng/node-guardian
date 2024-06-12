@@ -12,6 +12,7 @@ class NodeGuardian {
 
   async log(data) {
     const flattenData = stringify(data);
+    const processArgs = process.argv;
     await axios({
       method: 'post',
       url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
@@ -20,6 +21,8 @@ class NodeGuardian {
         accessToken: this.accessToken,
         level: info,
         flattenData,
+        timestamp: Date.now(),
+        processArgs,
       },
     });
   }
@@ -51,7 +54,10 @@ class NodeGuardian {
           requestProxyIp: req.headers['x-forwarded-for'],
           host: req.hostname,
           originalUrl: req.originalUrl,
+          fullUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
         };
+
+        const processArgs = process.argv;
 
         await axios({
           method: 'post',
@@ -63,6 +69,8 @@ class NodeGuardian {
             err: err.stack,
             filteredReqObj,
             code: errorCode.join('\n'),
+            timestamp: Date.now(),
+            processArgs,
           },
         });
 
