@@ -41,6 +41,7 @@ class NodeGuardian {
 
         const errorCode = [];
         const lines = data.split('\n');
+        const errMessage = data.split('\n')[0];
 
         for (let i = errorLine - 3 || 0; i < errorLine + 4 && i < lines.length; i++) {
           errorCode.push(lines[i]);
@@ -66,6 +67,7 @@ class NodeGuardian {
           data: {
             accessToken,
             level: 'error',
+            errMessage,
             err: err.stack,
             filteredReqObj,
             code: errorCode.join('\n'),
