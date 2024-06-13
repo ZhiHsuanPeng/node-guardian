@@ -42,7 +42,7 @@ class NodeGuardian {
         const errorCode = [];
         const lines = data.split('\n');
 
-        for (let i = errorLine - 2 || 0; i < errorLine + 2 && i < lines.length; i++) {
+        for (let i = errorLine - 3 || 0; i < errorLine + 4 && i < lines.length; i++) {
           errorCode.push(lines[i]);
         }
 
