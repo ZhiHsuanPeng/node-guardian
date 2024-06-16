@@ -60,6 +60,7 @@ class NodeGuardian {
         };
 
         const processArgs = process.argv;
+        const processPid = process.pid;
 
         await axios({
           method: 'post',
@@ -74,6 +75,7 @@ class NodeGuardian {
             code: errorCode.join('\n'),
             timestamp: Date.now(),
             processArgs,
+            processPid,
           },
         });
 
