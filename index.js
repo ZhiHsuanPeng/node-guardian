@@ -50,6 +50,7 @@ class NodeGuardian {
         const filteredReqObj = {
           headers: req.rawHeaders,
           userAgent: req.headers['user-agent'],
+          accept: req.headers['accept'],
           method: req.method,
           protocol: req.protocol,
           requestIp: req.socket.remoteAddress,
