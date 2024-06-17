@@ -3,6 +3,7 @@ import { parse } from 'stack-trace';
 import fs from 'fs/promises';
 import { stringify } from 'flatted';
 import https from 'https';
+import UAParser from 'ua-parser-js';
 
 class NodeGuardian {
   constructor(option = {}) {
@@ -30,6 +31,7 @@ class NodeGuardian {
   handleError() {
     const accessToken = this.accessToken;
     const httpsAgent = this.httpsAgent;
+    const parser = new UAParser();
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
@@ -46,6 +48,9 @@ class NodeGuardian {
         for (let i = errorLine - 3 || 0; i < errorLine + 4 && i < lines.length; i++) {
           errorCode.push(lines[i]);
         }
+
+        const userAgent = req.headers['user-agent'];
+        const parsedResult = parser.setUA(userAgent).getResult();
 
         const filteredReqObj = {
           headers: req.rawHeaders,
@@ -76,6 +81,7 @@ class NodeGuardian {
             timestamp: Date.now(),
             processArgs,
             processPid,
+            deviceInfo: parsedResult,
           },
         });
 
