@@ -1,9 +1,11 @@
-import axios from 'axios';
-import { parse } from 'stack-trace';
-import fs from 'fs/promises';
-import { stringify } from 'flatted';
-import https from 'https';
-import UAParser from 'ua-parser-js';
+'use strict';
+
+var axios = require('axios');
+var stackTrace = require('stack-trace');
+var fs = require('fs/promises');
+var flatted = require('flatted');
+var https = require('https');
+var UAParser = require('ua-parser-js');
 
 class NodeGuardian {
   constructor(option = {}) {
@@ -12,7 +14,7 @@ class NodeGuardian {
   }
 
   async log(data) {
-    const flattenData = stringify(data);
+    const flattenData = flatted.stringify(data);
     const processArgs = process.argv;
     await axios({
       method: 'post',
@@ -34,7 +36,7 @@ class NodeGuardian {
     const parser = new UAParser();
     return async function (err, req, res, next) {
       try {
-        const trace = parse(err);
+        const trace = stackTrace.parse(err);
         const regex = /^file:\/\/\/([A-Za-z]:\/.*)$/;
         const errorLine = trace[0].getLineNumber();
         const errorFilePath = trace[0].getFileName().match(regex)[1];
@@ -94,4 +96,4 @@ class NodeGuardian {
   }
 }
 
-export default NodeGuardian;
+module.exports = NodeGuardian;
