@@ -50,7 +50,7 @@ class NodeGuardian {
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
-        const regex = /^file:\/\/\/([A-Za-z]:\/.*)$/;
+        const regex = /^file:\/\/\/*([A-Za-z]:\/.*|\/.*)$/;
         const errorLine = trace[0].getLineNumber();
         const errorFilePath = trace[0].getFileName().match(regex)[1];
 
