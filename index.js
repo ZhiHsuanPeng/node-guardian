@@ -12,15 +12,6 @@ class NodeGuardian {
     this.httpsAgent = new https.Agent({ rejectUnauthorized: false });
   }
 
-  async fetchPublicIP() {
-    try {
-      const response = await axios.get('https://api.ipify.org?format=json');
-      return response.data.ip;
-    } catch (error) {
-      console.error('Error fetching public IP address:', error.message);
-    }
-  }
-
   getServerIP() {
     const interfaces = os.networkInterfaces();
     for (const interfaceName in interfaces) {
@@ -56,7 +47,6 @@ class NodeGuardian {
     const httpsAgent = this.httpsAgent;
     const parser = new UAParser();
     const getServerIP = this.getServerIP.bind(this);
-    const fetchPublicIP = this.fetchPublicIP.bind(this);
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
@@ -86,13 +76,15 @@ class NodeGuardian {
           requestIp: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
           host: req.hostname,
           originalUrl: req.originalUrl,
+          port: req.get('host').split(':')[1],
           fullUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
         };
 
         const processArgs = process.argv;
         const processPid = process.pid;
         const serverIp = getServerIP();
-        const publicIp = fetchPublicIP();
+        const response = await axios.get('https://api.ipify.org?format=json');
+        const publicIp = response.data.ip;
 
         await axios({
           method: 'post',
@@ -110,7 +102,7 @@ class NodeGuardian {
             processPid,
             deviceInfo: parsedResult,
             serverIp,
-            publicIp,
+            publicIp: { ip: publicIp },
           },
         });
 
