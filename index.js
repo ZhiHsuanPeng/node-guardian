@@ -46,6 +46,7 @@ class NodeGuardian {
     const accessToken = this.accessToken;
     const httpsAgent = this.httpsAgent;
     const parser = new UAParser();
+    const getServerIP = this.getServerIP.bind(this);
     return async function (err, req, res, next) {
       try {
         const trace = parse(err);
@@ -80,7 +81,7 @@ class NodeGuardian {
 
         const processArgs = process.argv;
         const processPid = process.pid;
-        const serverIp = this.getServerIP();
+        const serverIp = getServerIP();
 
         await axios({
           method: 'post',
