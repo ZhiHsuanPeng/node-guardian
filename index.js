@@ -10,6 +10,17 @@ class NodeGuardian {
   constructor(option = {}) {
     this.accessToken = option.accessToken || null;
     this.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    this.publicIp = null;
+    this.fetchPublicIP();
+  }
+
+  async fetchPublicIP() {
+    try {
+      const response = await axios.get('https://api.ipify.org?format=json');
+      this.publicIp = response.data.ip;
+    } catch (error) {
+      console.error('Error fetching public IP address:', error.message);
+    }
   }
 
   getServerIP() {
@@ -46,6 +57,7 @@ class NodeGuardian {
     const accessToken = this.accessToken;
     const httpsAgent = this.httpsAgent;
     const parser = new UAParser();
+    const publicIp = this.publicIp;
     const getServerIP = this.getServerIP.bind(this);
     return async function (err, req, res, next) {
       try {
@@ -99,6 +111,7 @@ class NodeGuardian {
             processPid,
             deviceInfo: parsedResult,
             serverIp,
+            publicIp,
           },
         });
 
