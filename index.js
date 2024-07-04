@@ -22,7 +22,7 @@ class NodeGuardian {
         }
       }
     }
-    return '0.0.0.0'; 
+    return '0.0.0.0';
   }
 
   async log(data) {
@@ -97,12 +97,13 @@ class NodeGuardian {
             processArgs,
             processPid,
             deviceInfo: parsedResult,
-            serverIp
+            serverIp,
           },
         });
 
         next(req, err);
       } catch (err) {
+        console.err(err);
         console.error('Error handling request:', err.response.data.message);
         next(req, err);
       }
