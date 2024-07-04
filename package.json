@@ -18,6 +18,7 @@
     "axios": "^1.7.2",
     "flatted": "^3.3.1",
     "https": "^1.0.0",
+    "os": "^0.1.2",
     "stack-trace": "^1.0.0-pre2",
     "ua-parser-js": "^1.0.38"
   },

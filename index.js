@@ -4,11 +4,25 @@ import fs from 'fs/promises';
 import { stringify } from 'flatted';
 import https from 'https';
 import UAParser from 'ua-parser-js';
+import os from 'os';
 
 class NodeGuardian {
   constructor(option = {}) {
     this.accessToken = option.accessToken || null;
     this.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+  }
+
+  getServerIP() {
+    const interfaces = os.networkInterfaces();
+    for (const interfaceName in interfaces) {
+      const addresses = interfaces[interfaceName];
+      for (const address of addresses) {
+        if (address.family === 'IPv4' && !address.internal) {
+          return address.address;
+        }
+      }
+    }
+    return '0.0.0.0'; 
   }
 
   async log(data) {
@@ -66,6 +80,7 @@ class NodeGuardian {
 
         const processArgs = process.argv;
         const processPid = process.pid;
+        const serverIp = this.getServerIP();
 
         await axios({
           method: 'post',
@@ -82,6 +97,7 @@ class NodeGuardian {
             processArgs,
             processPid,
             deviceInfo: parsedResult,
+            serverIp
           },
         });
 
