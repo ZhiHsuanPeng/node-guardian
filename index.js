@@ -103,7 +103,7 @@ class NodeGuardian {
 
         next(req, err);
       } catch (err) {
-        console.err(err);
+        console.error(err);
         console.error('Error handling request:', err.response.data.message);
         next(req, err);
       }
