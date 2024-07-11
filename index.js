@@ -83,7 +83,24 @@ class NodeGuardian {
         const processArgs = process.argv;
         const processPid = process.pid;
         const serverIp = getServerIP();
-        const response = await axios.get('https://api.ipify.org?format=json');
+        const services = [
+          { url: "https://api.ipify.org?format=json" },
+          { url: "https://api.ipify.org?format=json" },
+          { url: "https://ipinfo.io/json" },
+          { url: "https://ipapi.co/json/" },
+          { url: "https://api64.ipify.org/?format=json" },
+          { url: "https://myexternalip.com/json" },
+          { url: "https://ident.me/json" },
+        ];
+        const getRandomIntInclusive = () => {
+          const min = Math.ceil(0);
+          const max =services.length - 1;
+          return Math.floor(Math.random() * (max - min + 1) + min);
+        };
+        let response = await axios.get(services[getRandomIntInclusive()].url);
+        if (response.data.error) {
+            response = await axios.get(services[getRandomIntInclusive()].url);
+        }
         const publicIp = response.data.ip;
 
         await axios({
