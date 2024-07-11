@@ -97,10 +97,17 @@ class NodeGuardian {
           const max =services.length - 1;
           return Math.floor(Math.random() * (max - min + 1) + min);
         };
-        let response = await axios.get(services[getRandomIntInclusive()].url);
-        if (response.data.error) {
+        let response = '';
+        const getIp = async() => {
+          try {
             response = await axios.get(services[getRandomIntInclusive()].url);
+          } catch (err) {
+            if (err.response.status === 429) 
+              await getIp();
+          }
+          
         }
+        await getIp();
         const publicIp = response.data.ip;
 
         await axios({
