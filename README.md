@@ -18,3 +18,24 @@
 1. [Sign up for a NodeGuardian account.](https://nodeguardianapp.com/signup) (or you can use guest info to sign in)
 2. Create a project, which should give you an access token, copy this token as you will need it to authenticate your project.
 3. Follow instructions below to import and initialize the package.
+
+```
+// install package node-guardian
+$ npm install node-guardian
+
+// inside express framework, ESM only
+import node-guardian from 'node-guardian';
+const guard = new NodeGuardian({ accessToken: "< your project access token >" });
+
+// calling next on error
+try {
+} catch (err) {
+    next(err);
+}
+
+// use it as an error handling middleware
+app.use(guard.handleError());
+
+// your own error handler
+app.use(globalErrorHandler);
+```
