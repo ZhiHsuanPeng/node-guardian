@@ -33,9 +33,28 @@ try {
     next(err);
 }
 
+
 // use it as an error handling middleware
 app.use(guard.handleError());
 
 // your own error handler
 app.use(globalErrorHandler);
 ```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Added some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Create a new Pull Request.
+
+## FAQ
+
+#### Is this package ESM only?
+
+Yes, this package right now can only be initialized using ESM.
+
+#### Can I use this package outside Express framework?
+
+No, this package now can only be used in Express's error handling middleware. Future update will release more feature and functionality.
