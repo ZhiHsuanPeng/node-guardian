@@ -13,3 +13,8 @@
 - **Automatic error grouping:** NodeGuardian aggregates Occurrences caused by the same error into Items that represent application issues.
 - **Alarm system**: NodeGuardian is capable of sending emails upon detecting anomaly.
 - **Customizable notifications:** NodeGuardian supports different notifications rules, letting users modify their notification settings based on their need.
+
+## Setup Instructions
+1. [Sign up for a NodeGuardian account.](https://nodeguardianapp.com/signup) (or you can use guest info to sign in)
+2. Create a project, which should give you an access token, copy this token as you will need it to authenticate your project.
+3. Follow instructions below to import and initialize the package.
