@@ -25,23 +25,6 @@ class NodeGuardian {
     return '0.0.0.0';
   }
 
-  async log(data) {
-    const flattenData = stringify(data);
-    const processArgs = process.argv;
-    await axios({
-      method: 'post',
-      url: 'https://nodeguardianapp.com/api/v1/logs/newLogs',
-      httpsAgent: this.httpsAgent,
-      data: {
-        accessToken: this.accessToken,
-        level: info,
-        flattenData,
-        timestamp: Date.now(),
-        processArgs,
-      },
-    });
-  }
-
   handleError() {
     const accessToken = this.accessToken;
     const httpsAgent = this.httpsAgent;
@@ -84,29 +67,27 @@ class NodeGuardian {
         const processPid = process.pid;
         const serverIp = getServerIP();
         const services = [
-          { url: "https://api.ipify.org?format=json" },
-          { url: "https://api.ipify.org?format=json" },
-          { url: "https://ipinfo.io/json" },
-          { url: "https://ipapi.co/json/" },
-          { url: "https://api64.ipify.org/?format=json" },
-          { url: "https://myexternalip.com/json" },
-          { url: "https://ident.me/json" },
+          { url: 'https://api.ipify.org?format=json' },
+          { url: 'https://api.ipify.org?format=json' },
+          { url: 'https://ipinfo.io/json' },
+          { url: 'https://ipapi.co/json/' },
+          { url: 'https://api64.ipify.org/?format=json' },
+          { url: 'https://myexternalip.com/json' },
+          { url: 'https://ident.me/json' },
         ];
         const getRandomIntInclusive = () => {
           const min = Math.ceil(0);
-          const max =services.length - 1;
+          const max = services.length - 1;
           return Math.floor(Math.random() * (max - min + 1) + min);
         };
         let response = '';
-        const getIp = async() => {
+        const getIp = async () => {
           try {
             response = await axios.get(services[getRandomIntInclusive()].url);
           } catch (err) {
-            if (err.response.status === 429) 
-              await getIp();
+            if (err.response.status === 429) await getIp();
           }
-          
-        }
+        };
         await getIp();
         const publicIp = response.data.ip;
 
