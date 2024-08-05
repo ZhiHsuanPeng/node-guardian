@@ -20,7 +20,7 @@
 2. Create a project, which should give you an access token, copy this token as you will need it to authenticate your project.
 3. Follow instructions below to import and initialize the package.
 
-```
+```js
 // install package node-guardian
 $ npm install node-guardian
 
