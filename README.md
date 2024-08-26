@@ -25,7 +25,7 @@
 $ npm install node-guardian
 
 // inside express framework, ESM only
-import node-guardian from 'node-guardian';
+import NodeGuardian from 'node-guardian';
 const guard = new NodeGuardian({ accessToken: "< your project access token >" });
 
 // calling next on error
